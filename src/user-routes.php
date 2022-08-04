@@ -1,12 +1,14 @@
 <?php
 
+use Illuminate\Support\Arr;
+
 Route::group(['prefix' => '/', 'middleware' => 'web'], function(){
     $middleware = config('properos_users.router.default.middleware');
     $namespace = 'Properos\Users\Controllers';
 
     Route::get('/ru', $namespace.'\UserController@returnUser');
 
-    Route::group(['prefix' => 'admin', 'middleware' => array_get($middleware, 'admin', array_get($middleware, 'private', []))], function () use($namespace) {
+    Route::group(['prefix' => 'admin', 'middleware' => Arr::get($middleware, 'admin', Arr::get($middleware, 'private', []))], function () use($namespace) {
         Route::get('/users', $namespace.'\UserController@index')->middleware(['role:admin']);
         Route::group(['prefix' => '/users'], function () use($namespace) {
             Route::get('/create', $namespace.'\UserController@createUser')->middleware(['role:admin']);
@@ -15,7 +17,7 @@ Route::group(['prefix' => '/', 'middleware' => 'web'], function(){
         Route::get('/my-profile', $namespace.'\UserController@profile');
     });
 
-    Route::group(['prefix' => 'api/admin', 'middleware' => array_get($middleware, 'api/admin', array_get($middleware, 'private', []))], function () use($namespace) {
+    Route::group(['prefix' => 'api/admin', 'middleware' => Arr::get($middleware, 'api/admin', Arr::get($middleware, 'private', []))], function () use($namespace) {
         Route::get('/su/{user_id}', $namespace.'\UserController@setUser');
         Route::group(['prefix' => '/users'], function () use($namespace) {
             Route::post('/search', $namespace.'\UserController@usersSearch');

@@ -1,6 +1,7 @@
 {
     "name": "touhedul/users",
     "description": "Users package",
+    "license": "MIT",
     "authors": [
         {
             "name": "Properos LLC",
